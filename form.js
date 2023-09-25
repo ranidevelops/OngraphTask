@@ -1,109 +1,75 @@
-// First Name Validation
-var firstName= document.getElementById("fname");
-var firstNameValidation=function(){
-   firstNameValue=firstName.value.trim(); 
-   validFirstName=/^[A-Za-z]+$/;
-   firstNameErr=document.getElementById('first-name-err');
-   if(firstNameValue=="")
-   {
-    firstNameErr.innerHTML="First Name is required";
-   }else if(!validFirstName.test(firstNameValue)){
-     firstNameErr.innerHTML="First Name must be only string without white spaces";
-   }else{
-     firstNameErr.innerHTML="";
-     return true;
-    
-   }
-}
-firstName.oninput=function(){
-   
-   firstNameValidation();
-}
+   document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
 
-// Last Name Validation
-var lastName= document.getElementById("lname");
-var lastNameValidation= function(){
- lastNameValue=lastName.value.trim(); 
- validLastName=/^[A-Za-z]+$/;
- firstNameErr=document.getElementById('last-name-err');
-   if(firstNameValue=="")
-   {
-    lastNameErr.innerHTML="First Name is required";
-   }else if(!validFirstName.test(lastNameValue)){
-     lastNameErr.innerHTML="First Name must be only string without white spaces";
-   }else{
-     lastNameErr.innerHTML="";
-     return true;
-    
-   }
-}
- 
-lastName.oninput=function(){
- lastNameValidation();
-}
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+            const firstName = document.getElementById("fname").value.trim();
+            const lastName = document.getElementById("lname").value.trim();
+            const email = document.getElementById("emailAddress").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const mobileNumber = document.getElementById("mobileNumber").value.trim();
 
-// Email Address Validation
-var emailAddress= document.getElementById("emailAddress");;
-var emailAddressValidation= function(){
- emailAddressValue=emailAddress.value.trim(); 
-  validEmailAddress=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  emailAddressErr=document.getElementById('email-err');
-  if(emailAddressValue=="")
-  {
-   let msg=text.innerHTML="Email Address is required";
-  }else if(!validEmailAddress.test(emailAddressValue)){
-    emailAddressErr.innerHTML="Email Addre must be in valid formate with @ symbol";
-  }else{
-    emailAddressErr.innerHTML="";
-    return true;
-  }
-}
-emailAddress.oninput=function(){
-  emailAddressValidation();
-}
+            // Clear previous error messages
+            clearErrors();
 
-// Mobile Number Validation
-var mobileNumber= document.getElementById("mobileNumber");
-var mobileNumberValidation = function(){
-  mobileNumberValue=mobileNumber.value.trim(); 
-  validMobileNumber=/^[0-9]*$/;
-  mobileNumberErr=document.getElementById('mobile-number-err');
-  if(mobileNumberValue=="")
-  {
-   mobileNumberErr.innerHTML="Mobile Number is required";
-  }else if(!validMobileNumber.test(mobileNumberValue)){
-    mobileNumberErr.innerHTML="Mobile Number must be a number";
-  }else if(mobileNumberValue.length!=10){
-     mobileNumberErr.innerHTML="Mobile Number must have 10 digits";
-  }
-  else{
-    mobileNumberErr.innerHTML="";
-    return true;
-  }
-}
-mobileNumber.oninput=function(){
-  mobileNumberValidation();
-}
-//Password Validation
-var password= document.getElementById("password");;
-var passwordValidation = function(){
-  passwordValue=password.value.trim(); 
-   validPassword=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-   
-   passwordErr=document.getElementById('password-err');
-   if(passwordValue=="")
-   {
-    passwordErr.innerHTML="Password is required";
-   }else if(!validPassword.test(passwordValue)){
-     passwordErr.innerHTML="Password must have at least one Uppercase, lowercase, digit, special characters & 8 characters";
-   }
-   else{
-     passwordErr.innerHTML="";
-     return true;
-   }
-}
-password.oninput=function(){
-   passwordValidation();
- confirmPasswordValidation();
-   
-}
+            if (firstName === "") {
+                displayError("first-name-err", "First name is required.");
+                isValid = false;
+            }
+
+            if (lastName === "") {
+                displayError("last-name-err", "Last name is required.");
+                isValid = false;
+            }
+
+            if (email === "") {
+                displayError("email-err", "Email is required.");
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                displayError("email-err", "Invalid email address.");
+                isValid = false;
+            }
+
+            if (password === "") {
+                displayError("password-err", "Password is required.");
+                isValid = false;
+            }
+
+            if (confirmPassword === "") {
+                displayError("confirm-password-err", "Confirm password is required.");
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                displayError("confirm-password-err", "Passwords do not match.");
+                isValid = false;
+            }
+
+            if (mobileNumber === "") {
+                displayError("mobile-number-err", "Mobile number is required.");
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if there are errors
+            }
+        });
+
+        function clearErrors() {
+            const errorElements = document.querySelectorAll(".error");
+            errorElements.forEach(function (element) {
+                element.textContent = "";
+            });
+        }
+
+        function displayError(id, message) {
+            const errorElement = document.getElementById(id);
+            errorElement.textContent = message;
+            errorElement.classList.add("error");
+        }
+
+        function isValidEmail(email) {
+            // Basic email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    });
